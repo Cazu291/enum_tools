@@ -1,21 +1,21 @@
 #!/bin/bash
 
 separator="================================================================"
-run=$false
+run=false
 
 if [ -z $1 ]; then
         if [ -z $box ]; then
                 echo "Please either set the variable \$box or provide an ip so I set it for you"
 	else
 		target=$box
-		run=$true
+		run=true
         fi
 else
 	target=$1
-	run=$true
+	run=true
 fi
 
-if [ $run ]; then
+if [ "$run"=true ]; then
         # assigning value and pretty print
         echo $separator
         echo "--"
