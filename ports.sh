@@ -23,9 +23,9 @@ if [ "$run"=true ]; then
         echo "||target is: $box"
         echo "||"
         echo "--"
-        echo $separator
 
         # basic nmap
+	echo $separator
 	echo "-"
 	echo "|"
 	echo "| Running a basic nmap scan on the target"
@@ -37,6 +37,7 @@ if [ "$run"=true ]; then
         nmap -sV $box -o nmap.scan
 
         # advanced nmap
+	echo $separator
 	echo "-"
 	echo "|"
 	echo "| Running an extended nmap scan on $box"
@@ -48,6 +49,7 @@ if [ "$run"=true ]; then
 
         # Syn stealth nmap
         # needs the sudo to be started
+	echo $separator
 	echo "-"
         echo "|"
         echo "| Running a Syn Stealth nmap scan on $box"
@@ -58,6 +60,7 @@ if [ "$run"=true ]; then
         sudo nmap -sS $box -o nmap_stealth.scan
 
         # UDP nmap
+	echo $separator
         echo "-"
         echo "|"
         echo "| Running an UDP nmap scan on $box"
