@@ -1,19 +1,26 @@
 #!/bin/bash
 
 separator="================================================================"
+run=$false
 
 if [ -z $1 ]; then
 	if [ -z $box ]; then
 	        echo "If \$box is not set, command usage is: ports.sh <target>"
 	else
 		target=$box
+		run=$true
 	fi
 else
+	target=$1
+	run=$true
+fi
+
+if [ $run ]; then
+
         dirs_wordlist=/usr/share/wordlists/dirb/big.txt
         subs_wordlist=/usr/share/wordlists/dirb/subs/n0kovo_subdomains/n0kovo_subdomains_medium.txt
 
         # pretty print
-        target=$1
         echo separator
         echo "--"
         echo "||"
