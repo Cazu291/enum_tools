@@ -3,7 +3,11 @@
 separator="================================================================"
 
 if [ -z $1 ]; then
-        echo "command usage is: ports.sh <target> [<dirs_wordlist> <subs_wordlist>]"
+	if [ -z $box ]; then
+	        echo "If \$box is not set, command usage is: ports.sh <target>"
+	else
+		target=$box
+	fi
 else
         dirs_wordlist=/usr/share/wordlists/dirb/big.txt
         subs_wordlist=/usr/share/wordlists/dirb/subs/n0kovo_subdomains/n0kovo_subdomains_medium.txt

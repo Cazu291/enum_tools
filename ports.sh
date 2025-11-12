@@ -4,11 +4,13 @@ separator="================================================================"
 
 if [ -z $1 ]; then
         if [ -z $box ]; then
-                echo "Please either set the variable \$box or provide an ip so i set it for you"
+                echo "Please either set the variable \$box or provide an ip so I set it for you"
+	else
+		target=$box
         fi
 else
         # assigning value and pretty print
-        export box=$1
+	target=$1
         echo $separator
         echo "--"
         echo "||"
