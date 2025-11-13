@@ -5,6 +5,7 @@ run=false
 
 if [ -z $1 ]; then
         echo "Command usage is: ports.sh <target>"
+else
 	target=$1
 
         dirs_wordlist=/usr/share/wordlists/dirb/big.txt

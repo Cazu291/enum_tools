@@ -40,6 +40,9 @@ else
 	echo "-"
         nmap -A $target -o nmap_extended.scan
 
+	# scripts nmap
+	nmap -sC -p- --open -o nmap-full.txt $target
+
         # Syn stealth nmap
         # needs the sudo to be started
 	echo $separator
