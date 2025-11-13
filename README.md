@@ -1,5 +1,6 @@
 # enum_tools
-obsidian://open?vault=Cysec%20Notes&file=Pasted%20image%2020251113230441.png
+
+<img width="1854" height="1168" alt="image" src="https://github.com/user-attachments/assets/58ac2b41-89e6-4199-9370-6519c4464642" />
 
 This tool was designed to run a very simple set of commands for scanning a machine, especially for a htb machine, as they usually contain a website to use for privesc.
 
