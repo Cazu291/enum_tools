@@ -4,23 +4,16 @@ separator="================================================================"
 run=false
 
 if [ -z $1 ]; then
-        if [ -z $box ]; then
-                echo "Please either set the variable \$box or provide an ip so I set it for you"
-	else
-		target=$box
-		run=true
-        fi
+        echo "Command usage is: ports.sh <target>"
 else
 	target=$1
-	run=true
-fi
-
-if [ "$run"=true ]; then
         # assigning value and pretty print
         echo $separator
         echo "--"
         echo "||"
-        echo "||target is: $box"
+	echo "|| Now starting ports scans."
+	echo "||"
+        echo "|| target is: $target."
         echo "||"
         echo "--"
 
@@ -30,11 +23,11 @@ if [ "$run"=true ]; then
 	echo "|"
 	echo "| Running a basic nmap scan on the target"
 	echo "|"
-	echo "| $ nmap -sV $box -o nmap.scan"
+	echo "| $ nmap -sV $target -o nmap.scan"
 	echo "|"
 	echo "-"
 	echo ""
-        nmap -sV $box -o nmap.scan
+        nmap -sV $target -o nmap.scan
 
         # advanced nmap
 	echo $separator
@@ -42,10 +35,10 @@ if [ "$run"=true ]; then
 	echo "|"
 	echo "| Running an extended nmap scan on $box"
 	echo "|"
-	echo "| $ nmap -A $box -o nmap_extended.scan"
+	echo "| $ nmap -A $target -o nmap_extended.scan"
 	echo "|"
 	echo "-"
-        nmap -A $box -o nmap_extended.scan
+        nmap -A $target -o nmap_extended.scan
 
         # Syn stealth nmap
         # needs the sudo to be started
@@ -54,10 +47,10 @@ if [ "$run"=true ]; then
         echo "|"
         echo "| Running a Syn Stealth nmap scan on $box"
         echo "|"
-        echo "| $ sudo nmap -sS $box -o nmap_stealth.scan"
+        echo "| $ sudo nmap -sS $target -o nmap_stealth.scan"
         echo "|"
         echo "-"
-        sudo nmap -sS $box -o nmap_stealth.scan
+        sudo nmap -sS $target -o nmap_stealth.scan
 
         # UDP nmap
 	echo $separator
@@ -65,8 +58,8 @@ if [ "$run"=true ]; then
         echo "|"
         echo "| Running an UDP nmap scan on $box"
         echo "|"
-        echo "| $ sudo nmap -sU $box -o nmap_udp.scan"
+        echo "| $ sudo nmap -sU $target -o nmap_udp.scan"
         echo "|"
         echo "-"
-        nmap -sU $box -o nmap_udp.scan
+        nmap -sU $target -o nmap_udp.scan
 fi
