@@ -1,5 +1,5 @@
 # enum_tools
-![[image.png]]
+obsidian://open?vault=Cysec%20Notes&file=Pasted%20image%2020251113230441.png
 
 This tool was designed to run a very simple set of commands for scanning a machine, especially for a htb machine, as they usually contain a website to use for privesc.
 
