@@ -156,7 +156,7 @@ main () {
 	run_command "ffuf scanning for subdomains on the website $url" "ffuf -u http://FUZZ.$url -w $sublist -o subs.scan"
 	run_command "ffuf scanning for files on the website $url" "ffuf -u http://$url/FUZZ -w $filelist -o files.scan"
 	# nmap scans
-	run_command "nmap all ports scan on $target" "nmap -T4 -v -p- --open $target -oN nmap-all-ports.txt"
+	run_command "nmap all ports scan on $target" "nmap -T4 -v -p- --open $target -oN nmap-all-ports.scan"
 	run_command "nmap udp scan on $target" "nmap -sU -v -T4 $target -oN nmap-udp.scan"
 
 }
