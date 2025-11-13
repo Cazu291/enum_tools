@@ -1,16 +1,19 @@
 #!/bin/bash
 
+read -r -d '' ascii_art << 'EOF'
+-       █▒▒   █▒▒▒▒
+ █▒▒▒▒  █▒▒ █▒▒ █▒▒
+ █▒ █▒▒ █▒▒ █▒▒ █▒▒
+█▒▒ █▒▒ █▒▒ █▒▒ █▒▒
+█▒▒▒▒▒▒ █▒▒ █▒▒ █▒▒ █▒▒
+█▒▒ █▒▒ █▒▒ █▒▒ █▒▒
+█▒▒ █▒▒ █▒▒ █▒▒▒▒
+EOF
+
+printf "%s\n" "$ascii_art"
+
 header_separator="===================================================================================="
 command_separator="================================================================"
-banner=" \
-      █▒             █▒▒          █▒▒▒▒      \
-      █▒ ▒▒           █▒▒        █▒▒    █▒▒  \
-     █▒  █▒▒          █▒▒      █▒▒        █▒▒\
-    █▒▒   █▒▒         █▒▒      █▒▒        █▒▒\
-   █▒▒▒▒▒▒ █▒▒        █▒▒      █▒▒        █▒▒\
-  █▒▒       █▒▒       █▒▒        █▒▒     █▒▒ \
- █▒▒         █▒▒      █▒▒          █▒▒▒▒     \
-"
 
 print_header () {
 	echo $header_separator
@@ -33,12 +36,13 @@ run_command () {
 	echo "-"
 	echo ""
 	$2
+	echo ""
 }
 
 run=false
 
 if [ -z $1 ]; then
-        echo "Command usage is: ai1.sh <target> [<website>]"
+        echo "Command usage is: aio.sh <target> [<website>]"
 else
 	target=$1
 	web_scans=false;
