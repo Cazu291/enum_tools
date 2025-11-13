@@ -26,11 +26,11 @@ error_message () {
 	echo ""
 	echo "usage: aio.sh ([<flag> [<value>]]*|--target <target>)"
 	echo "  Options:"
-	echo "    -t|--target <target>: specifies the targeted ip, required"
-	echo "    -d|--dirlist <list>	: change the file for the directories fuzzing, default is	/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt"
-	echo "    -f|--filelist <list>: change the file for the files fuzzing, default is		/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files-lowercase.txt"
-	echo "    -s|--sublist <list>	: change the file for the subs fuzzing, default is		/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
-	echo "    -u|--url <url>	: sets the domain name/url for the web scans, for exmple editor.htb"
+	echo "    -t| --target <target>	: specifies the targeted ip, required"
+	echo "    -d| --dirlist <list>	: change the file for the directories fuzzing, default is	/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt"
+	echo "    -f| --filelist <list>	: change the file for the files fuzzing, default is		/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files-lowercase.txt"
+	echo "    -s| --sublist <list>	: change the file for the subs fuzzing, default is		/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
+	echo "    -u| --url <url>		: sets the domain name/url for the web scans, example would be 	-u editor.htb"
 	echo ""
 }
 
