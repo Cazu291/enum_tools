@@ -53,8 +53,9 @@ else
 		web_scans=true
 	fi
 
-        dirs_wordlist=/usr/share/wordlists/dirb/big.txt
-        subs_wordlist=/usr/share/wordlists/dirb/subs/n0kovo_subdomains/n0kovo_subdomains_medium.txt
+	files_wordlist=/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files-lowercase.txt
+        dirs_wordlist=/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+        subs_wordlist=/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt
 
 	echo $banner
 	echo ""
@@ -69,6 +70,7 @@ else
 	print_header "Now running advanced scans on ports and website"
 	if [ "web_scans" = true ]; then
 		run_command "ffuf scanning for subdomains on the website $website" "ffuf -u http://FUZZ.$website -w $subs_wordlist -o subs.scan"
+		run_command "ffuf scanning for files on the website $website" "ffuf -u http://$website/FUZZ -w $files_wordlist -o files.scan"
 	fi
 	run_command "nmap all ports scan on $target" "nmap -T4 -v -p- --open $target -o nmap-all-ports.txt"
 	run_command "nmap udp scan on $target" "nmap -sU -v -T4 target -o nmap-udp.scan"
