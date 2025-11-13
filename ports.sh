@@ -23,11 +23,11 @@ else
 	echo "|"
 	echo "| Running a basic nmap scan on the target"
 	echo "|"
-	echo "| $ nmap -sV $target -o nmap.scan"
+	echo "| $ nmap $target -o nmap.scan"
 	echo "|"
 	echo "-"
 	echo ""
-        nmap -sV $target -o nmap.scan
+        nmap $target -o nmap.scan
 
         # advanced nmap
 	echo $separator
