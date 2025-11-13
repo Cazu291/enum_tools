@@ -61,18 +61,16 @@ else
 	echo ""
 
 	print_header "Starting basic scans on ports and website dirs"
-	run_command "nmap quick tcp scan on $target" "nmap $target -o nmap.scan"
-	run_command "nmap extended tcp on $target"  "nmap -A $target -o nmap.scan"
+	run_command "nmap basic tcp on $target"  "nmap -sCV -T4 -v $target -o nmap.scan"
 	if [ "$web_scans" = true ]; then
 		run_command "ffuf scanning for directories on the website $website" "ffuf -u http://$website/FUZZ -w $dirs_wordlist -o dirs.scan"
 	fi
 
 	print_header "Now running advanced scans on ports and website"
-	run_command "nmap syn stealth scan on $target" "sudo nmap -sS $target -o nmap-stealth.scan"
-	run_command "nmap script scan on $target" "nmap -sC -p- --open -o nmap-scripts.txt $target"
 	if [ "web_scans" = true ]; then
 		run_command "ffuf scanning for subdomains on the website $website" "ffuf -u http://FUZZ.$website -w $subs_wordlist -o subs.scan"
 	fi
-	run_command "nmap udp scan on $target" "nmap -sU $target -o nmap-udp.scan"
+	run_command "nmap all ports scan on $target" "nmap -T4 -v -p- --open $target -o nmap-all-ports.txt"
+	run_command "nmap udp scan on $target" "nmap -sU -v -T4 target -o nmap-udp.scan"
 
 fi
