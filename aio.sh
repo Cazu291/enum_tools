@@ -196,7 +196,7 @@ main () {
 
 
 	## advanced scans
-	print_header "Running advanced scans on website and subdirectories"
+	print_header "Running advanced scans subdomains"
 	# ffuf scans
 	run_command "ffuf scanning for subdomains on the website $url" "ffuf -u http://FUZZ.$url -w $sublist -o $output/subs.json"
 	subs=$(cat $output/subs.json | jq -r '.results[].url')
@@ -206,12 +206,12 @@ main () {
 	done
 	run_command "nuclei scanning each subdomain" "nuclei -l targets.txt -o $output/nuclei-subs.scan"
 	echo "$url" >> targets.txt
-	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $reclist:FUZZ -recursion -recursion-depth 3 -o $output/sub-rec.json"
+	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $reclist:FUZZ -recursion -recursion-depth 3 -s -o $output/sub-rec.json"
 	rm targets.txt
 
 
 	# last ports
-	print_header "Finishing with ports as to not miss anything"
+	print_header "Finishing with farther ports as to not miss anything"
 	# nmap scans
 	run_command "nmap all ports scan on $target" "nmap -T4 -v -p- --open $target -oN $output/nmap-all-ports.scan"
 	run_command "nmap udp scan on $target" "nmap -sU -v -T4 $target -oN $output/nmap-udp.scan"
