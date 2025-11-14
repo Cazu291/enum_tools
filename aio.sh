@@ -127,7 +127,7 @@ if [ -z "$output" ]; then
 fi
 
 print_header () {
-	printf "%s\n" "$hader_separator"
+	printf "%s\n" "$header_separator"
 	echo "|||"
 	echo "|||"
 	echo "||| $1"
