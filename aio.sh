@@ -17,7 +17,6 @@ echo "Thank you for using this tool"
 echo "credit goes to nmap and ffuf for being so useful"
 echo " - TheLastOfEugenes"
 
-
 header_separator="===================================================================================="
 command_separator="================================================================"
 
@@ -62,6 +61,16 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
+    -sd|--small-directory-list)
+      smalldirlist="$2"
+      shift;
+      shift;
+      ;;
+    -o|--output)
+      output="$2"
+      shift
+      shift
+      ;;
     -u|--url)
       url="$2"
       shift # past argument
@@ -101,6 +110,12 @@ if [ -z "$dirlist" ]; then
 fi
 if [ -z "$sublist" ]; then
 	sublist="/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
+fi
+if [ -z "$smalldirlist" ]; then
+	smalldirlist="/usr/share/wordlists/seclists/Discovery/Web-Content/raft-small-directories-lowercase.txt"
+fi
+if [ -z "$output" ]; then
+	output="aio_scans"
 fi
 
 print_header () {
@@ -143,22 +158,40 @@ main () {
 	echo "|| filelist: $filelist"
 	echo ""
 
+	mkdir aio_scans
+
 	## simple scans
-	print_header "Starting basic scans on ports and website dirs"
+	print_header "Starting with basic scans on ports and website dirs"
 	# nmap scans
-	run_command "nmap basic tcp on $target"  "nmap -sCV -T4 -v $target -oN nmap.scan"
+	run_command "nmap basic tcp on $target"  "nmap -sCV -T4 -v $target -oN aio_scans/nmap.scan"
 	# ffuf scan
-	run_command "ffuf scanning for directories on the website $url" "ffuf -u http://$url/FUZZ -w $dirlist -o dirs.scan"
+	run_command "ffuf scanning for directories on the website $url" "ffuf -u http://$url/FUZZ -w $dirlist -o $output/dirs.json"
+	run_command "ffuf scanning for files on the website $url" "ffuf -u http://$url/FUZZ -w $filelist -o $output/files.json"
+	# nuclei scan
+	run_command "nuclei scan on the main website $url" "nuclei -u $url -o $output/nuclei.scan"
+
 
 	## advanced scans
-	print_header "Now running advanced scans on ports and website"
+	print_header "Running advanced scans on website and subdirectories"
 	# ffuf scans
-	run_command "ffuf scanning for subdomains on the website $url" "ffuf -u http://FUZZ.$url -w $sublist -o subs.scan"
-	run_command "ffuf scanning for files on the website $url" "ffuf -u http://$url/FUZZ -w $filelist -o files.scan"
+	run_command "ffuf scanning for subdomains on the website $url" "ffuf -u http://FUZZ.$url -w $sublist -o $output/subs.json"
+	subs=$(cat subs.json | jq -r '.results[].url')
+	touch targets.txt
+	for sub in $subs; do
+		echo "$subs" >> targets.txt
+	done
+	run_command "nuclei scanning each subdomain" "nuclei -l targets.txt -o $output/nuclei-subs.scan"
+	echo "$url" >> targets.txt
+	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $smalldirlist:FUZZ -recursion -recusrion-depth 3 -o $output/sub-rec.json"
+
+
+	# last ports
+	print_header "Finishing with ports as to not miss anything"
 	# nmap scans
-	run_command "nmap all ports scan on $target" "nmap -T4 -v -p- --open $target -oN nmap-all-ports.scan"
-	run_command "nmap udp scan on $target" "nmap -sU -v -T4 $target -oN nmap-udp.scan"
+	run_command "nmap all ports scan on $target" "nmap -T4 -v -p- --open $target -oN $output/nmap-all-ports.scan"
+	run_command "nmap udp scan on $target" "nmap -sU -v -T4 $target -oN $output/nmap-udp.scan"
 
 }
 
 main "$@"
+
