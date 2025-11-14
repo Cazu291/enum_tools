@@ -150,7 +150,9 @@ run_command () {
 	echo "-"
 	echo ""
 	$2
-	echo ""
+	for _ in $(seq 0 1); do
+		echo ""
+	done
 }
 
 main () {
