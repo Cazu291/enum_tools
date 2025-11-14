@@ -127,6 +127,9 @@ if [ -z "$output" ]; then
 fi
 
 print_header () {
+	for _ in $(seq 0 9); do
+		echo ""
+	done
 	printf "%s\n" "$header_separator"
 	echo "|||"
 	echo "|||"
