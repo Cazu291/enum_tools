@@ -199,7 +199,7 @@ main () {
 	print_header "Running advanced scans on website and subdirectories"
 	# ffuf scans
 	run_command "ffuf scanning for subdomains on the website $url" "ffuf -u http://FUZZ.$url -w $sublist -o $output/subs.json"
-	subs=$(cat subs.json | jq -r '.results[].url')
+	subs=$(cat $output/subs.json | jq -r '.results[].url')
 	touch targets.txt
 	for sub in $subs; do
 		echo "$subs" >> targets.txt
