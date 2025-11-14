@@ -202,10 +202,10 @@ main () {
 	subs=$(cat $output/subs.json | jq -r '.results[].url')
 	touch targets.txt
 	for sub in $subs; do
-		echo "$subs" >> targets.txt
+		echo "$sub" >> targets.txt
 	done
 	run_command "nuclei scanning each subdomain" "nuclei -l targets.txt -o $output/nuclei-subs.scan"
-	echo "$url" >> targets.txt
+	echo "http://$url" >> targets.txt
 	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $reclist:FUZZ -recursion -recursion-depth 3 -s -o $output/sub-rec.json"
 	rm targets.txt
 
