@@ -157,10 +157,15 @@ run_command () {
 
 main () {
 
+	# measure exec time
+	start=`date +%s`
+
+	# prints banner
 	echo $banner
 	echo ""
 	echo ""
 
+	# prints parameters values
 	echo $command_separator
 	echo "|| set parameters are:"
 	echo "||"
@@ -173,6 +178,7 @@ main () {
 	echo "|| output dir: $output"
 	echo ""
 
+	# create dir for storing outputs
 	if [ ! -d "$output" ]; then
     		mkdir -p "$output"
    		echo "Directory created: $output"
@@ -209,6 +215,11 @@ main () {
 	# nmap scans
 	run_command "nmap all ports scan on $target" "nmap -T4 -v -p- --open $target -oN $output/nmap-all-ports.scan"
 	run_command "nmap udp scan on $target" "nmap -sU -v -T4 $target -oN $output/nmap-udp.scan"
+
+	# outputs runtime
+	end=`date +%s`
+	runtime=$((end-start))
+	echo "runtime: $runtime"
 
 }
 
