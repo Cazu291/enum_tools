@@ -29,6 +29,9 @@ error_message () {
 	echo "    -d| --dirlist <list>	: change the file for the directories fuzzing, default is	/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt"
 	echo "    -f| --filelist <list>	: change the file for the files fuzzing, default is		/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files-lowercase.txt"
 	echo "    -s| --sublist <list>	: change the file for the subs fuzzing, default is		/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
+	echo "    -r| --reclist <list>	: change the file for the recursive directory fuzzing, it is recommended to use a small file for this one. Default is"
+	echo "												/usr/share/wordlists/seclists/Discovery/Web-Content/raft-small-directories-lowercase.txt"
+	echo "    -o| --output <dir>		: a directory will be created with the results of the scans inside, default is 'aio_scans', to avoid creating one just use the value ., an error will be raised but it can be ignored"
 	echo "    -u| --url <url>		: sets the domain name/url for the web scans, example would be 	-u editor.htb"
 	echo ""
 }
@@ -61,8 +64,8 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
-    -sd|--small-directory-list)
-      smalldirlist="$2"
+    -r|--reclist)
+      reclist="$2"
       shift;
       shift;
       ;;
@@ -111,8 +114,8 @@ fi
 if [ -z "$sublist" ]; then
 	sublist="/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
 fi
-if [ -z "$smalldirlist" ]; then
-	smalldirlist="/usr/share/wordlists/seclists/Discovery/Web-Content/raft-small-directories-lowercase.txt"
+if [ -z "$reclist" ]; then
+	reclist="/usr/share/wordlists/seclists/Discovery/Web-Content/raft-small-directories-lowercase.txt"
 fi
 if [ -z "$output" ]; then
 	output="aio_scans"
@@ -182,7 +185,7 @@ main () {
 	done
 	run_command "nuclei scanning each subdomain" "nuclei -l targets.txt -o $output/nuclei-subs.scan"
 	echo "$url" >> targets.txt
-	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $smalldirlist:FUZZ -recursion -recusrion-depth 3 -o $output/sub-rec.json"
+	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $reclist:FUZZ -recursion -recusrion-depth 3 -o $output/sub-rec.json"
 
 
 	# last ports
