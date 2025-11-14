@@ -26,13 +26,13 @@ error_message () {
 	echo "usage: aio.sh ([<flag> [<value>]]*|--target <target>)"
 	echo "  Options:"
 	echo "    -t| --target <target>	: specifies the targeted ip, required"
+	echo "    -u| --url <url>		: sets the domain name/url for the web scans, example would be 	-u editor.htb"
 	echo "    -d| --dirlist <list>	: change the file for the directories fuzzing, default is	/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt"
 	echo "    -f| --filelist <list>	: change the file for the files fuzzing, default is		/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files-lowercase.txt"
 	echo "    -s| --sublist <list>	: change the file for the subs fuzzing, default is		/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
 	echo "    -r| --reclist <list>	: change the file for the recursive directory fuzzing, it is recommended to use a small file for this one. Default is"
 	echo "												/usr/share/wordlists/seclists/Discovery/Web-Content/raft-small-directories-lowercase.txt"
-	echo "    -o| --output <dir>		: a directory will be created with the results of the scans inside, default is 'aio_scans', to avoid creating one just use the value ., an error will be raised but it can be ignored"
-	echo "    -u| --url <url>		: sets the domain name/url for the web scans, example would be 	-u editor.htb"
+	echo "    -o| --output <dir>		: a directory will be created with the results of the scans inside -- default is 'aio_scans' -- to avoid creating one just use the value '.'"
 	echo ""
 }
 
@@ -159,9 +159,14 @@ main () {
 	echo "|| dirlist: $dirlist"
 	echo "|| sublist: $sublist"
 	echo "|| filelist: $filelist"
+	echo "|| reclist: $reclist"
+	echo "|| output dir: $output"
 	echo ""
 
-	mkdir aio_scans
+	if [ ! -d "$output" ]; then
+    		mkdir -p "$output"
+   		echo "Directory created: $output"
+	fi
 
 	## simple scans
 	print_header "Starting with basic scans on ports and website dirs"
@@ -186,6 +191,7 @@ main () {
 	run_command "nuclei scanning each subdomain" "nuclei -l targets.txt -o $output/nuclei-subs.scan"
 	echo "$url" >> targets.txt
 	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $reclist:FUZZ -recursion -recusrion-depth 3 -o $output/sub-rec.json"
+	rm targets.txt
 
 
 	# last ports
