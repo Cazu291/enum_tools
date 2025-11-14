@@ -17,7 +17,12 @@ echo "Thank you for using this tool"
 echo "credit goes to nmap and ffuf for being so useful"
 echo " - TheLastOfEugenes"
 
-header_separator="===================================================================================="
+read -r -d '' header_separator << 'EOF'
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+EOF
+
 command_separator="================================================================"
 
 # Error message function
@@ -27,9 +32,9 @@ error_message () {
 	echo "  Options:"
 	echo "    -t| --target <target>	: specifies the targeted ip, required"
 	echo "    -u| --url <url>		: sets the domain name/url for the web scans, example would be 	-u editor.htb"
-	echo "    -d| --dirlist <list>	: change the file for the directories fuzzing, default is	/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt"
-	echo "    -f| --filelist <list>	: change the file for the files fuzzing, default is		/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files-lowercase.txt"
-	echo "    -s| --sublist <list>	: change the file for the subs fuzzing, default is		/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
+	echo "    -d| --dirlist <list>	: change the file for the directories fuzzing, default is	/usr/share/wordlists/seclists/Discovery/Web-Content/raft-medium-directories-lowercase.txt"
+	echo "    -f| --filelist <list>	: change the file for the files fuzzing, default is		/usr/share/wordlists/seclists/Discovery/Web-Content/raft-medium-files-lowercase.txt"
+	echo "    -s| --sublist <list>	: change the file for the subs fuzzing, default is		/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-5000.txt"
 	echo "    -r| --reclist <list>	: change the file for the recursive directory fuzzing, it is recommended to use a small file for this one. Default is"
 	echo "												/usr/share/wordlists/seclists/Discovery/Web-Content/raft-small-directories-lowercase.txt"
 	echo "    -o| --output <dir>		: a directory will be created with the results of the scans inside -- default is 'aio_scans' -- to avoid creating one just use the value '.'"
@@ -112,7 +117,7 @@ if [ -z "$dirlist" ]; then
 	dirlist="/usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt"
 fi
 if [ -z "$sublist" ]; then
-	sublist="/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
+	sublist="/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-5000.txt"
 fi
 if [ -z "$reclist" ]; then
 	reclist="/usr/share/wordlists/seclists/Discovery/Web-Content/raft-small-directories-lowercase.txt"
@@ -122,13 +127,13 @@ if [ -z "$output" ]; then
 fi
 
 print_header () {
-	echo $header_separator
+	printf "%s\n" "$hader_separator"
 	echo "|||"
 	echo "|||"
 	echo "||| $1"
 	echo "|||"
 	echo "|||"
-	echo $header_separator
+	printf "%s\n" "$header_separator"
 	echo ""
 }
 
@@ -190,7 +195,7 @@ main () {
 	done
 	run_command "nuclei scanning each subdomain" "nuclei -l targets.txt -o $output/nuclei-subs.scan"
 	echo "$url" >> targets.txt
-	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $reclist:FUZZ -recursion -recusrion-depth 3 -o $output/sub-rec.json"
+	run_command "ffuf scanning for drectories on the subdomains" "ffuf -u 'TARGET/FUZZ' -w targets.txt:TARGET -w $reclist:FUZZ -recursion -recursion-depth 3 -o $output/sub-rec.json"
 	rm targets.txt
 
 
