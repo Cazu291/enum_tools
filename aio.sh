@@ -149,7 +149,7 @@ run_command () {
 	echo "|"
 	echo "-"
 	echo ""
-	$2
+	eval "$2"
 	for _ in $(seq 0 1); do
 		echo ""
 	done
@@ -219,7 +219,10 @@ main () {
 	# outputs runtime
 	end=`date +%s`
 	runtime=$((end-start))
-	echo "runtime: $runtime"
+	minutes=$((runtime / 60))
+	seconds=$((runtime % 60))
+
+	echo "${minutes}m${seconds}s"
 
 }
 
